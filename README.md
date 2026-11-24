@@ -16,7 +16,6 @@ Rules First, AI Second. AI Interprets, Business Rules Decide. Anything Uncertain
 | **The Solution** | Text every customer, interpret the replies, auto-confirm the routine ones, and give the dispatcher a short exceptions list. |
 | **The Result** | 10 appointments in, 6 confirmed automatically, 4 sent to a person. |
 | **The Principle** | Automate certainty. Escalate ambiguity. The system never reschedules, cancels, prices or dispatches on its own. |
-| **My Contribution** | Problem framing and prioritization, decision engine, n8n workflow, backend API, dispatcher UI integration, tests, and documentation. |
 
 ---
 
@@ -29,6 +28,34 @@ Rules First, AI Second. AI Interprets, Business Rules Decide. Anything Uncertain
 | Sent to the Dispatcher | 4 | 1 schedule change, 1 question, 2 no response |
 
 The customer who asks to move her appointment is routed to a person. Her schedule is not touched.
+
+## Screenshots
+
+### Overview: Exceptions First
+
+![Overview showing 10 appointments, 6 confirmed and 4 needing review, with the exception queue](docs/images/01-overview.png)
+
+The dispatcher opens one screen and sees only what needs her: a schedule change, a question and two no-responses.
+
+### Detail Drawer: Human Control
+
+![Angela Brooks detail drawer showing the confirmation message, her reply, and the note that no schedule change was made automatically](docs/images/02-detail-drawer.png)
+
+The system understood the request to move the appointment, but it did not change the schedule. The decision stays with the dispatcher.
+
+### Automation Details: Rules First, AI Second
+
+![Denise Harper's automation details showing a deterministic rule with no AI required](docs/images/03-automation-details.png)
+
+An exact `YES` is resolved by a rule with no model call. A natural-language reply like "My wife will be there" is interpreted by the model.
+
+### Activity: Traceability
+
+![Activity page showing a chronological record of messages sent, replies, and routing decisions](docs/images/04-activity.png)
+
+Every event is recorded in order, so it is clear what the customer said, what the system decided and why.
+
+---
 
 ---
 
@@ -137,72 +164,6 @@ Production planning: [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.
 | Clean-Install Check | Fresh extract, `npm run setup`, tests, demo, build and browser checks all pass |
 
 Recorded output: [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md).
-
-**Verification Levels, Kept Separate on Purpose**
-
-| Level | Status |
-|---|---|
-| Automation Logic Executed Locally | Verified |
-| Edge Cases Executed Locally | Verified |
-| Engine, API, Database and UI Executed Together | Verified |
-| n8n Workflow Structure | Validated by script (does not run n8n) |
-| n8n Workflow Executed With a Live Claude Call | Run locally by the author; execution evidence to be added under `docs/` |
-| Node Engine Making a Live Anthropic Call | Supported by the code path; automated runs use a fixture so tests need no API key |
-
----
-
-## Run It Locally
-
-Requirements: Node 20+ and npm. Python 3 with Playwright is needed only for the optional browser check.
-
-```bash
-git clone https://github.com/aswathy-chandrasekar/comfort-pro-confirmation-center.git
-cd comfort-pro-confirmation-center
-npm run setup
-```
-
-**1. Automation Tests** (No Servers, No API Key)
-
-```bash
-npm run test-all
-```
-
-**2. Full Demo** (Three Terminals)
-
-```bash
-npm run backend:start     # terminal 1: API on :4000
-npm run demo              # terminal 2: seed, reset, run the engine into the backend
-npm run frontend:start    # terminal 3: dispatcher UI on :3000
-```
-
-Sign in with the pre-filled credentials. Expected: 10 appointments, 6 confirmed, 4 needing review (Angela Brooks, Patricia Lyons, Kevin Marsh, Bill Sanders). `npm run demo` resets first, so it is safe to repeat. Running only the sync step again shows idempotency: all ten events report `DUPLICATE_IGNORED`.
-
-**3. Browser Check** (Optional)
-
-```bash
-pip install playwright && playwright install chromium
-python frontend/e2e/check_ui.py
-```
-
-**Live Classification** (Optional): copy `.env.example`, set `ANTHROPIC_API_KEY`, and run the engine or sync script. Without a key the classifier uses `automation/data/llm_fixture.json`. The model name is set in `automation/src/engine.js` and in the n8n HTTP node; change both together.
-
-**n8n:** import `automation/workflow/Comfort_Pro_Confirmations.json` and create the header credential the "Classify Intent" node expects. Run `npm run automation:workflow:validate` after any edit.
-
----
-
-## Scope and Roadmap
-
-This is the smallest system that proves the business case end to end. What it deliberately leaves for the pilot phase:
-
-| Next Step | Why It Is a Pilot Step |
-|---|---|
-| Connect n8n to the Backend API | The UI is fed by a sync script that runs the same engine. Pointing n8n's HTTP nodes at the same endpoints is a contained change. |
-| Audit-Driven Activity Page | Activity already uses recorded send, reply and checkpoint times; reading the audit table directly is the next iteration. |
-| Consent, Opt-Out, Retries and Delivery Receipts | These depend on the chosen SMS provider and legal guidance; they are specified in the readiness document. |
-| Tune the 0.85 Confidence Gate | It is a conservative starting assumption to calibrate on dispatcher-reviewed historical replies. |
-| API Authentication and Monitoring | Required before any real customer data; specified in the readiness document. |
-
-Behaviors worth knowing: the UI polls the API every 3 seconds; only "tomorrow" has a live batch; "Mark Reviewed" is local UI state and does not write to ServiceTitan; the frontend build sets `DISABLE_ESLINT_PLUGIN=true` in `frontend/.env` because of a toolchain version clash, and a `patch-package` patch for `ajv-keywords` applies automatically on install.
 
 ---
 
