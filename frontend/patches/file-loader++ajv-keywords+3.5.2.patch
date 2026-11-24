@@ -1,0 +1,13 @@
+diff --git a/node_modules/file-loader/node_modules/ajv-keywords/keywords/_formatLimit.js b/node_modules/file-loader/node_modules/ajv-keywords/keywords/_formatLimit.js
+index e731a8a..b763a1b 100644
+--- a/node_modules/file-loader/node_modules/ajv-keywords/keywords/_formatLimit.js
++++ b/node_modules/file-loader/node_modules/ajv-keywords/keywords/_formatLimit.js
+@@ -58,7 +58,7 @@ module.exports = function (minMax) {
+ 
+ 
+ function extendFormats(ajv) {
+-  var formats = ajv._formats;
++  var formats = ajv._formats || (ajv._formats = {}); // PATCHED: upstream ajv-keywords@3.5.2 defensive fix, see root README
+   for (var name in COMPARE_FORMATS) {
+     var format = formats[name];
+     // the last condition is needed if it's RegExp from another window

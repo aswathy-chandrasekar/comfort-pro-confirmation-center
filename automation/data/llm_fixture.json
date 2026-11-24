@@ -1,0 +1,26 @@
+{
+  "primary": {
+    "4471": {"intent":"CONFIRMED","confidence":0.95,"summary":"Customer confirms they will be home for the appointment."},
+    "4472": {"intent":"CONFIRMED","confidence":0.93,"summary":"Customer confirms and reiterates the reported AC issue."},
+    "4473": {"intent":"RESCHEDULE","confidence":0.98,"summary":"Customer asks to move the appointment to the afternoon."},
+    "4474": {"intent":"CONFIRMED","confidence":0.95,"summary":"Customer indicates someone will be present for the appointment."},
+    "4476": {"intent":"CONFIRMED","confidence":0.90,"summary":"Customer agrees to the scheduled appointment."},
+    "4477": {"intent":"QUESTION","confidence":0.96,"summary":"Customer asks which technician is being sent."},
+    "4479": {"intent":"CONFIRMED","confidence":0.94,"summary":"Customer confirms the appointment and thanks the team."}
+  },
+  "edge_cases": {
+    "EC2": {"intent":"CONFIRMED","confidence":0.94,"summary":"Customer confirms they will be present."},
+    "EC3": {"intent":"CONFIRMED","confidence":0.95,"summary":"Customer indicates someone will be present."},
+    "EC4": {"intent":"RESCHEDULE","confidence":0.98,"summary":"Customer requested a later appointment time."},
+    "EC5": {"intent":"RESCHEDULE","confidence":0.75,"summary":"Customer indicates tomorrow's scheduled time does not work for them."},
+    "EC6": {"intent":"CANCEL_CHANGE","confidence":0.97,"summary":"Customer requests cancellation of the appointment."},
+    "EC7": {"intent":"QUESTION","confidence":0.97,"summary":"Customer is asking about the cost of the job."},
+    "EC8": {"intent":"QUESTION","confidence":0.90,"summary":"Customer asks about adding additional work to the visit."},
+    "EC9": {"intent":"AMBIGUOUS","confidence":0.40,"summary":"Customer response does not clearly confirm attendance."},
+    "EC10": {"intent":"AMBIGUOUS","confidence":0.50,"summary":"Customer asks to be called; scheduling intent is unclear from text alone."},
+    "EC15": {"intent":"CONFIRMED","confidence":0.60,"summary":"Customer expresses intent to be present but with hedging language."},
+    "EC17b": {"intent":"RESCHEDULE","confidence":0.93,"summary":"Customer sent a follow-up requesting a different day after an earlier confirmation."},
+    "JOB-STATE-1": {"intent":"RESCHEDULE","confidence":0.93,"summary":"Customer sent a follow-up requesting a different day after an earlier confirmation."},
+    "JOB-LATE-REPLY-1": {"intent":"CONFIRMED","confidence":0.93,"summary":"Customer confirms after previously not responding by the checkpoint."}
+  }
+}

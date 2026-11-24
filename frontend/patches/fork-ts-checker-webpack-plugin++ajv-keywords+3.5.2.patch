@@ -1,0 +1,25 @@
+diff --git a/node_modules/fork-ts-checker-webpack-plugin/node_modules/ajv-keywords/keywords/_formatLimit.js b/node_modules/fork-ts-checker-webpack-plugin/node_modules/ajv-keywords/keywords/_formatLimit.js
+index e731a8a..2558905 100644
+--- a/node_modules/fork-ts-checker-webpack-plugin/node_modules/ajv-keywords/keywords/_formatLimit.js
++++ b/node_modules/fork-ts-checker-webpack-plugin/node_modules/ajv-keywords/keywords/_formatLimit.js
+@@ -58,7 +58,19 @@ module.exports = function (minMax) {
+ 
+ 
+ function extendFormats(ajv) {
+-  var formats = ajv._formats;
++  // PATCHED: upstream ajv-keywords@3.5.2 (vendored inside
++  // fork-ts-checker-webpack-plugin's own node_modules) assumes
++  // ajv._formats is always populated. Under this project's webpack/craco
++  // execution context (not reproducible via a plain `node -e` isolation
++  // test - isolated construction of the same Ajv+ajv-keywords versions
++  // works correctly), that internal field is sometimes undefined,
++  // crashing the production build even though this project uses no
++  // TypeScript and never actually needs this plugin's functionality.
++  // Guarding here is a minimal, defensive fix for a real upstream gap
++  // (accessing a "should always exist" internal without a null check),
++  // not a change to any application logic. See root README's
++  // "Known limitations" section.
++  var formats = ajv._formats || (ajv._formats = {});
+   for (var name in COMPARE_FORMATS) {
+     var format = formats[name];
+     // the last condition is needed if it's RegExp from another window

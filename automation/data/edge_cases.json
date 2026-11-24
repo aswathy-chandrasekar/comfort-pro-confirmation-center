@@ -1,0 +1,20 @@
+[
+  {"case_id":"EC1","input":"YES","expected_path":"DETERMINISTIC","expected_intent":"CONFIRMED"},
+  {"case_id":"EC2","input":"Yep I'll be there","expected_path":"LLM","expected_intent":"CONFIRMED"},
+  {"case_id":"EC3","input":"My husband will be home","expected_path":"LLM","expected_intent":"CONFIRMED"},
+  {"case_id":"EC4","input":"Can you come after 3?","expected_path":"LLM","expected_intent":"RESCHEDULE"},
+  {"case_id":"EC5","input":"I can't do tomorrow","expected_path":"LLM","expected_intent":"RESCHEDULE","note":"Policy: ambiguous cancel-vs-reschedule phrasing defaults to RESCHEDULE (less destructive, still escalated to Linda either way). See README section 'Policy: EC5'."},
+  {"case_id":"EC6","input":"Cancel it","expected_path":"LLM","expected_intent":"CANCEL_CHANGE"},
+  {"case_id":"EC7","input":"How much will this cost?","expected_path":"LLM","expected_intent":"QUESTION"},
+  {"case_id":"EC8","input":"Can Carlos also fix my toilet?","expected_path":"LLM","expected_intent":"QUESTION"},
+  {"case_id":"EC9","input":"Probably","expected_path":"LLM","expected_intent":"AMBIGUOUS"},
+  {"case_id":"EC10","input":"Call me","expected_path":"LLM","expected_intent":"AMBIGUOUS"},
+  {"case_id":"EC11","input":null,"expected_path":"NO_RESPONSE","expected_intent":"NO_RESPONSE"},
+  {"case_id":"EC12","input":"garbled non-json simulated LLM fault","expected_path":"LLM","simulate_fault":"MALFORMED_OUTPUT","expected_intent":"NEEDS_REVIEW"},
+  {"case_id":"EC13","input":"any text, simulated timeout","expected_path":"LLM","simulate_fault":"API_TIMEOUT","expected_intent":"NEEDS_REVIEW"},
+  {"case_id":"EC14","input":"any text, simulated bad label","expected_path":"LLM","simulate_fault":"UNSUPPORTED_INTENT","expected_intent":"NEEDS_REVIEW"},
+  {"case_id":"EC15","input":"Yes I'll be there for sure I think","expected_path":"LLM","simulate_fault":"LOW_CONFIDENCE_CONFIRMED","expected_intent":"NEEDS_REVIEW","note":"Simulates classifier returning CONFIRMED at confidence 0.60, below 0.85 threshold -> must NOT auto-confirm."},
+  {"case_id":"EC16","input":"YES","expected_path":"DETERMINISTIC","expected_intent":"CONFIRMED","note":"Sent twice for same job_id to test idempotency; second identical inbound message must not create a second outbound action or duplicate audit row."},
+  {"case_id":"EC17a","input":"Yes","expected_path":"DETERMINISTIC","expected_intent":"CONFIRMED"},
+  {"case_id":"EC17b","input":"Actually can we do Friday?","expected_path":"LLM","expected_intent":"RESCHEDULE","note":"Second, later message for the same job_id must override the earlier CONFIRMED status - last message wins, see README 'Multi-message handling'."}
+]

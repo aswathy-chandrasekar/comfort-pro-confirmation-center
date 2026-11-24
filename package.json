@@ -1,0 +1,24 @@
+{
+  "name": "comfort-pro-confirmation-center",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Appointment-confirmation automation (rules first, AI second, human escalation) with a React dispatcher console. Root scripts only; each part has its own dependencies.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup": "npm run backend:install && npm run frontend:install",
+    "backend:install": "cd backend && npm install",
+    "frontend:install": "cd frontend && npm install --legacy-peer-deps",
+    "backend:start": "cd backend && npm start",
+    "backend:seed": "cd backend && npm run seed",
+    "backend:reset": "cd backend && npm run reset",
+    "frontend:start": "cd frontend && npm start",
+    "frontend:build": "cd frontend && npm run build",
+    "automation:primary": "cd automation && node tests/run_primary.js",
+    "automation:edge-cases": "cd automation && node tests/run_edge_cases.js",
+    "automation:workflow:validate": "cd automation && node workflow/validate_workflow.js",
+    "demo": "npm run backend:seed && npm run backend:reset && cd automation && node scripts/sync_to_backend.js",
+    "test-all": "npm run automation:primary && npm run automation:edge-cases && npm run automation:workflow:validate"
+  }
+}

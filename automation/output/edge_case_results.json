@@ -1,0 +1,204 @@
+[
+  {
+    "case_id": "EC1",
+    "input": "YES",
+    "path_used": "DETERMINISTIC",
+    "expected": "CONFIRMED",
+    "actual": "CONFIRMED",
+    "confidence": 1,
+    "final_status": "CONFIRMED",
+    "pass": true
+  },
+  {
+    "case_id": "EC2",
+    "input": "Yep I'll be there",
+    "path_used": "LLM",
+    "expected": "CONFIRMED",
+    "actual": "CONFIRMED",
+    "confidence": 0.94,
+    "final_status": "CONFIRMED",
+    "pass": true
+  },
+  {
+    "case_id": "EC3",
+    "input": "My husband will be home",
+    "path_used": "LLM",
+    "expected": "CONFIRMED",
+    "actual": "CONFIRMED",
+    "confidence": 0.95,
+    "final_status": "CONFIRMED",
+    "pass": true
+  },
+  {
+    "case_id": "EC4",
+    "input": "Can you come after 3?",
+    "path_used": "LLM",
+    "expected": "RESCHEDULE",
+    "actual": "RESCHEDULE",
+    "confidence": 0.98,
+    "final_status": "NEEDS_RESCHEDULE",
+    "pass": true
+  },
+  {
+    "case_id": "EC5",
+    "input": "I can't do tomorrow",
+    "path_used": "LLM",
+    "expected": "RESCHEDULE",
+    "actual": "RESCHEDULE",
+    "confidence": 0.75,
+    "final_status": "NEEDS_RESCHEDULE",
+    "pass": true
+  },
+  {
+    "case_id": "EC6",
+    "input": "Cancel it",
+    "path_used": "LLM",
+    "expected": "CANCEL_CHANGE",
+    "actual": "CANCEL_CHANGE",
+    "confidence": 0.97,
+    "final_status": "NEEDS_REVIEW",
+    "pass": true
+  },
+  {
+    "case_id": "EC7",
+    "input": "How much will this cost?",
+    "path_used": "LLM",
+    "expected": "QUESTION",
+    "actual": "QUESTION",
+    "confidence": 0.97,
+    "final_status": "NEEDS_RESPONSE",
+    "pass": true
+  },
+  {
+    "case_id": "EC8",
+    "input": "Can Carlos also fix my toilet?",
+    "path_used": "LLM",
+    "expected": "QUESTION",
+    "actual": "QUESTION",
+    "confidence": 0.9,
+    "final_status": "NEEDS_RESPONSE",
+    "pass": true
+  },
+  {
+    "case_id": "EC9",
+    "input": "Probably",
+    "path_used": "LLM",
+    "expected": "AMBIGUOUS",
+    "actual": "AMBIGUOUS",
+    "confidence": 0.4,
+    "final_status": "NEEDS_REVIEW",
+    "pass": true
+  },
+  {
+    "case_id": "EC10",
+    "input": "Call me",
+    "path_used": "LLM",
+    "expected": "AMBIGUOUS",
+    "actual": "AMBIGUOUS",
+    "confidence": 0.5,
+    "final_status": "NEEDS_REVIEW",
+    "pass": true
+  },
+  {
+    "case_id": "EC11",
+    "input": null,
+    "path_used": "NO_RESPONSE",
+    "expected": "NO_RESPONSE",
+    "actual": "NO_RESPONSE",
+    "confidence": null,
+    "final_status": "NO_RESPONSE",
+    "pass": true
+  },
+  {
+    "case_id": "EC12",
+    "input": "garbled non-json simulated LLM fault",
+    "path_used": "LLM",
+    "expected": "NEEDS_REVIEW",
+    "actual": "NEEDS_REVIEW",
+    "confidence": null,
+    "final_status": "NEEDS_REVIEW",
+    "pass": true
+  },
+  {
+    "case_id": "EC13",
+    "input": "any text, simulated timeout",
+    "path_used": "LLM",
+    "expected": "NEEDS_REVIEW",
+    "actual": "NEEDS_REVIEW",
+    "confidence": null,
+    "final_status": "NEEDS_REVIEW",
+    "pass": true
+  },
+  {
+    "case_id": "EC14",
+    "input": "any text, simulated bad label",
+    "path_used": "LLM",
+    "expected": "NEEDS_REVIEW",
+    "actual": "NEEDS_REVIEW",
+    "confidence": 0.9,
+    "final_status": "NEEDS_REVIEW",
+    "pass": true
+  },
+  {
+    "case_id": "EC15",
+    "input": "Yes I'll be there for sure I think",
+    "path_used": "LLM",
+    "expected": "NEEDS_REVIEW",
+    "actual": "NEEDS_REVIEW",
+    "confidence": 0.6,
+    "final_status": "NEEDS_REVIEW",
+    "pass": true
+  },
+  {
+    "case_id": "STATE-OVERRIDE",
+    "input": "[\"Yes\", \"Actually can we do Friday?\"]",
+    "expected": "history=[CONFIRMED, NEEDS_RESCHEDULE], current_status=NEEDS_RESCHEDULE, history not erased",
+    "actual": "history=[CONFIRMED, NEEDS_RESCHEDULE], current_status=NEEDS_RESCHEDULE",
+    "pass": true
+  },
+  {
+    "case_id": "DUPLICATE-SHORT-CIRCUIT",
+    "input": "same event_id sent twice",
+    "expected": "first=CONFIRMED, second=DUPLICATE_IGNORED, history length stays 1",
+    "actual": "first=CONFIRMED, second=DUPLICATE_IGNORED, history_len=1",
+    "pass": true
+  },
+  {
+    "case_id": "EXACT-MATCH-SAFETY",
+    "input": "\"Y\" vs \"WHY\"",
+    "expected": "\"Y\"->DETERMINISTIC/CONFIRMED, \"WHY\"->NOT deterministic",
+    "actual": "Y->DETERMINISTIC/CONFIRMED, WHY->LLM",
+    "pass": true
+  },
+  {
+    "case_id": "LATE-REPLY-AFTER-NO-RESPONSE",
+    "input": "[no reply by checkpoint] then [\"Yes, I'll be home.\"] later",
+    "expected": "checkpoint=NO_RESPONSE, later=CONFIRMED, current_status=CONFIRMED, history=[NO_RESPONSE, CONFIRMED] (2 entries, first preserved)",
+    "actual": "checkpoint=NO_RESPONSE, later=CONFIRMED, current_status=CONFIRMED, history=[NO_RESPONSE, CONFIRMED]",
+    "pass": true
+  },
+  {
+    "case_id": "SCHEMA-total-equals-sum",
+    "expected": true,
+    "actual": true,
+    "pass": true
+  },
+  {
+    "case_id": "SCHEMA-every-exception-has-action",
+    "expected": true,
+    "actual": true,
+    "pass": true
+  },
+  {
+    "case_id": "SCHEMA-every-appt-has-status",
+    "expected": true,
+    "actual": true,
+    "pass": true
+  },
+  {
+    "case_id": "SCHEMA-no-impossible-statuses",
+    "expected": true,
+    "actual": true,
+    "pass": true
+  }
+]

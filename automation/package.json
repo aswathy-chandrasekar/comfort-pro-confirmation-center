@@ -1,0 +1,14 @@
+{
+  "name": "comfort-pro-confirmation-automation",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Comfort Pro appointment confirmation automation engine (see root README.md)",
+  "scripts": {
+    "primary": "node tests/run_primary.js",
+    "edge-cases": "node tests/run_edge_cases.js",
+    "validate-workflow": "node workflow/validate_workflow.js",
+    "test-all": "npm run primary && npm run edge-cases && npm run validate-workflow",
+    "sync": "node scripts/sync_to_backend.js"
+  },
+  "notes": "No dependencies required - tests/run_primary.js and tests/run_edge_cases.js run on plain Node 18+. See root README.md for the full pipeline (automation -> adapter -> frontend build)."
+}

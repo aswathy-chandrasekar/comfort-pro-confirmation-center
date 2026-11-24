@@ -1,0 +1,442 @@
+[
+  {
+    "job_id": "4471",
+    "customer_name": "Maria Gonzalez",
+    "phone": "214-555-0142",
+    "address": "318 Elmwood Dr, Plano",
+    "service": "AC Maintenance",
+    "window": "8-10",
+    "technician": "Derek",
+    "notes": "Annual tune up member",
+    "outbound_message": "Hi Maria, this is Comfort Pro. Derek is scheduled for your AC Maintenance tomorrow between 8 AM and 10 AM at 318 Elmwood Dr, Plano. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": "Yep I'll be home, thanks",
+    "response_timestamp": "2026-09-12T22:07:00.000Z",
+    "processing_method": "LLM",
+    "detected_intent": "CONFIRMED",
+    "confidence": 0.95,
+    "classifier_summary": "Customer confirms they will be home for the appointment.",
+    "final_status": "CONFIRMED",
+    "linda_action_required": false,
+    "suggested_action": null,
+    "escalation_reason": null,
+    "customer_acknowledgement": "Thanks, you're confirmed. We'll see you tomorrow.",
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": "2026-09-12T22:07:00.000Z",
+        "actor": "CUSTOMER",
+        "event": "Customer replied: \"Yep I'll be home, thanks\""
+      },
+      {
+        "time": "2026-09-12T22:07:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Response categorized as CONFIRMED (llm)"
+      },
+      {
+        "time": "2026-09-12T22:07:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Marked confirmed automatically"
+      }
+    ]
+  },
+  {
+    "job_id": "4472",
+    "customer_name": "Tom Whitfield",
+    "phone": "972-555-0198",
+    "address": "904 Ridgecrest Ln, Richardson",
+    "service": "AC Repair",
+    "window": "8-10",
+    "technician": "Luis",
+    "notes": "Unit not cooling per customer",
+    "outbound_message": "Hi Tom, this is Comfort Pro. Luis is scheduled for your AC Repair tomorrow between 8 AM and 10 AM at 904 Ridgecrest Ln, Richardson. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": "Yes please, AC still isn't cooling",
+    "response_timestamp": "2026-09-12T22:08:30.000Z",
+    "processing_method": "LLM",
+    "detected_intent": "CONFIRMED",
+    "confidence": 0.93,
+    "classifier_summary": "Customer confirms and reiterates the reported AC issue.",
+    "final_status": "CONFIRMED",
+    "linda_action_required": false,
+    "suggested_action": null,
+    "escalation_reason": null,
+    "customer_acknowledgement": "Thanks, you're confirmed. We'll see you tomorrow.",
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": "2026-09-12T22:08:30.000Z",
+        "actor": "CUSTOMER",
+        "event": "Customer replied: \"Yes please, AC still isn't cooling\""
+      },
+      {
+        "time": "2026-09-12T22:08:30.000Z",
+        "actor": "SYSTEM",
+        "event": "Response categorized as CONFIRMED (llm)"
+      },
+      {
+        "time": "2026-09-12T22:08:30.000Z",
+        "actor": "SYSTEM",
+        "event": "Marked confirmed automatically"
+      }
+    ]
+  },
+  {
+    "job_id": "4473",
+    "customer_name": "Angela Brooks",
+    "phone": "469-555-0233",
+    "address": "2210 Lakeshore Ct, Garland",
+    "service": "Plumbing Repair",
+    "window": "10-12",
+    "technician": "Carlos",
+    "notes": "Leak under kitchen sink",
+    "outbound_message": "Hi Angela, this is Comfort Pro. Carlos is scheduled for your Plumbing Repair tomorrow between 10 AM and 12 PM at 2210 Lakeshore Ct, Garland. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": "Can we move this to tomorrow afternoon?",
+    "response_timestamp": "2026-09-12T22:10:00.000Z",
+    "processing_method": "LLM",
+    "detected_intent": "RESCHEDULE",
+    "confidence": 0.98,
+    "classifier_summary": "Customer asks to move the appointment to the afternoon.",
+    "final_status": "NEEDS_RESCHEDULE",
+    "linda_action_required": true,
+    "suggested_action": "Contact customer to review requested schedule change",
+    "escalation_reason": "Customer asks to move the appointment to the afternoon.",
+    "customer_acknowledgement": "Thanks — I've passed your request to our dispatch team. They'll follow up to confirm any schedule change.",
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": "2026-09-12T22:10:00.000Z",
+        "actor": "CUSTOMER",
+        "event": "Customer replied: \"Can we move this to tomorrow afternoon?\""
+      },
+      {
+        "time": "2026-09-12T22:10:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Response categorized as RESCHEDULE (llm)"
+      },
+      {
+        "time": "2026-09-12T22:10:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Added to dispatcher review queue"
+      }
+    ]
+  },
+  {
+    "job_id": "4474",
+    "customer_name": "Robert Chen",
+    "phone": "214-555-0377",
+    "address": "55 Pecan Hollow, McKinney",
+    "service": "AC Install Estimate",
+    "window": "10-12",
+    "technician": "Derek",
+    "notes": "Quote to replace 15 yr old unit",
+    "outbound_message": "Hi Robert, this is Comfort Pro. Derek is scheduled for your AC Install Estimate tomorrow between 10 AM and 12 PM at 55 Pecan Hollow, McKinney. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": "My wife will be there",
+    "response_timestamp": "2026-09-12T22:11:30.000Z",
+    "processing_method": "LLM",
+    "detected_intent": "CONFIRMED",
+    "confidence": 0.95,
+    "classifier_summary": "Customer indicates someone will be present for the appointment.",
+    "final_status": "CONFIRMED",
+    "linda_action_required": false,
+    "suggested_action": null,
+    "escalation_reason": null,
+    "customer_acknowledgement": "Thanks, you're confirmed. We'll see you tomorrow.",
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": "2026-09-12T22:11:30.000Z",
+        "actor": "CUSTOMER",
+        "event": "Customer replied: \"My wife will be there\""
+      },
+      {
+        "time": "2026-09-12T22:11:30.000Z",
+        "actor": "SYSTEM",
+        "event": "Response categorized as CONFIRMED (llm)"
+      },
+      {
+        "time": "2026-09-12T22:11:30.000Z",
+        "actor": "SYSTEM",
+        "event": "Marked confirmed automatically"
+      }
+    ]
+  },
+  {
+    "job_id": "4475",
+    "customer_name": "Denise Harper",
+    "phone": "972-555-0410",
+    "address": "1402 Willow Bend, Frisco",
+    "service": "Water Heater",
+    "window": "12-2",
+    "technician": "Carlos",
+    "notes": "No hot water since Sunday",
+    "outbound_message": "Hi Denise, this is Comfort Pro. Carlos is scheduled for your Water Heater tomorrow between 12 PM and 2 PM at 1402 Willow Bend, Frisco. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": "YES",
+    "response_timestamp": "2026-09-12T22:13:00.000Z",
+    "processing_method": "DETERMINISTIC",
+    "detected_intent": "CONFIRMED",
+    "confidence": 1,
+    "classifier_summary": "Exact-match confirmation token, handled without AI.",
+    "final_status": "CONFIRMED",
+    "linda_action_required": false,
+    "suggested_action": null,
+    "escalation_reason": null,
+    "customer_acknowledgement": "Thanks, you're confirmed. We'll see you tomorrow.",
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": "2026-09-12T22:13:00.000Z",
+        "actor": "CUSTOMER",
+        "event": "Customer replied: \"YES\""
+      },
+      {
+        "time": "2026-09-12T22:13:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Response categorized as CONFIRMED (deterministic)"
+      },
+      {
+        "time": "2026-09-12T22:13:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Marked confirmed automatically"
+      }
+    ]
+  },
+  {
+    "job_id": "4476",
+    "customer_name": "James Okafor",
+    "phone": "469-555-0466",
+    "address": "731 Meadow Park, Allen",
+    "service": "AC Maintenance",
+    "window": "12-2",
+    "technician": "Luis",
+    "notes": "Annual tune up member",
+    "outbound_message": "Hi James, this is Comfort Pro. Luis is scheduled for your AC Maintenance tomorrow between 12 PM and 2 PM at 731 Meadow Park, Allen. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": "Sounds good",
+    "response_timestamp": "2026-09-12T22:14:30.000Z",
+    "processing_method": "LLM",
+    "detected_intent": "CONFIRMED",
+    "confidence": 0.9,
+    "classifier_summary": "Customer agrees to the scheduled appointment.",
+    "final_status": "CONFIRMED",
+    "linda_action_required": false,
+    "suggested_action": null,
+    "escalation_reason": null,
+    "customer_acknowledgement": "Thanks, you're confirmed. We'll see you tomorrow.",
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": "2026-09-12T22:14:30.000Z",
+        "actor": "CUSTOMER",
+        "event": "Customer replied: \"Sounds good\""
+      },
+      {
+        "time": "2026-09-12T22:14:30.000Z",
+        "actor": "SYSTEM",
+        "event": "Response categorized as CONFIRMED (llm)"
+      },
+      {
+        "time": "2026-09-12T22:14:30.000Z",
+        "actor": "SYSTEM",
+        "event": "Marked confirmed automatically"
+      }
+    ]
+  },
+  {
+    "job_id": "4477",
+    "customer_name": "Patricia Lyons",
+    "phone": "214-555-0521",
+    "address": "88 Cottonwood Trl, Plano",
+    "service": "AC Repair",
+    "window": "2-4",
+    "technician": "Derek",
+    "notes": "Thermostat blank",
+    "outbound_message": "Hi Patricia, this is Comfort Pro. Derek is scheduled for your AC Repair tomorrow between 2 PM and 4 PM at 88 Cottonwood Trl, Plano. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": "Who's coming?",
+    "response_timestamp": "2026-09-12T22:16:00.000Z",
+    "processing_method": "LLM",
+    "detected_intent": "QUESTION",
+    "confidence": 0.96,
+    "classifier_summary": "Customer asks which technician is being sent.",
+    "final_status": "NEEDS_RESPONSE",
+    "linda_action_required": true,
+    "suggested_action": "Respond to customer question",
+    "escalation_reason": "Customer asks which technician is being sent.",
+    "customer_acknowledgement": "Thanks — I've passed your question to our team and they'll follow up.",
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": "2026-09-12T22:16:00.000Z",
+        "actor": "CUSTOMER",
+        "event": "Customer replied: \"Who's coming?\""
+      },
+      {
+        "time": "2026-09-12T22:16:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Response categorized as QUESTION (llm)"
+      },
+      {
+        "time": "2026-09-12T22:16:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Added to dispatcher review queue"
+      }
+    ]
+  },
+  {
+    "job_id": "4478",
+    "customer_name": "Kevin Marsh",
+    "phone": "972-555-0588",
+    "address": "5109 Stonebridge Rd, McKinney",
+    "service": "Drain Cleaning",
+    "window": "2-4",
+    "technician": "Carlos",
+    "notes": "Slow drain master bath",
+    "outbound_message": "Hi Kevin, this is Comfort Pro. Carlos is scheduled for your Drain Cleaning tomorrow between 2 PM and 4 PM at 5109 Stonebridge Rd, McKinney. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": null,
+    "response_timestamp": null,
+    "processing_method": "NO_RESPONSE",
+    "detected_intent": "NO_RESPONSE",
+    "confidence": null,
+    "classifier_summary": "No reply received.",
+    "final_status": "NO_RESPONSE",
+    "linda_action_required": true,
+    "suggested_action": "Call customer",
+    "escalation_reason": "No reply received to confirmation message",
+    "customer_acknowledgement": null,
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": null,
+        "actor": "SYSTEM",
+        "event": "No response received by cutoff — added to dispatcher review queue"
+      }
+    ]
+  },
+  {
+    "job_id": "4479",
+    "customer_name": "Linda Tran",
+    "phone": "469-555-0602",
+    "address": "1633 Oak Grove Dr, Richardson",
+    "service": "AC Repair",
+    "window": "4-6",
+    "technician": "Luis",
+    "notes": "Making loud noise",
+    "outbound_message": "Hi Linda, this is Comfort Pro. Luis is scheduled for your AC Repair tomorrow between 4 PM and 6 PM at 1633 Oak Grove Dr, Richardson. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": "Confirmed, thank you",
+    "response_timestamp": "2026-09-12T22:19:00.000Z",
+    "processing_method": "LLM",
+    "detected_intent": "CONFIRMED",
+    "confidence": 0.94,
+    "classifier_summary": "Customer confirms the appointment and thanks the team.",
+    "final_status": "CONFIRMED",
+    "linda_action_required": false,
+    "suggested_action": null,
+    "escalation_reason": null,
+    "customer_acknowledgement": "Thanks, you're confirmed. We'll see you tomorrow.",
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": "2026-09-12T22:19:00.000Z",
+        "actor": "CUSTOMER",
+        "event": "Customer replied: \"Confirmed, thank you\""
+      },
+      {
+        "time": "2026-09-12T22:19:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Response categorized as CONFIRMED (llm)"
+      },
+      {
+        "time": "2026-09-12T22:19:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Marked confirmed automatically"
+      }
+    ]
+  },
+  {
+    "job_id": "4480",
+    "customer_name": "Bill Sanders",
+    "phone": "214-555-0699",
+    "address": "420 Prairie View, Frisco",
+    "service": "AC Maintenance",
+    "window": "4-6",
+    "technician": "Derek",
+    "notes": "Annual tune up member",
+    "outbound_message": "Hi Bill, this is Comfort Pro. Derek is scheduled for your AC Maintenance tomorrow between 4 PM and 6 PM at 420 Prairie View, Frisco. Reply YES to confirm. If you need to change your appointment or have a question, just reply here.",
+    "outbound_timestamp": "2026-09-12T22:00:00.000Z",
+    "customer_response": null,
+    "response_timestamp": null,
+    "processing_method": "NO_RESPONSE",
+    "detected_intent": "NO_RESPONSE",
+    "confidence": null,
+    "classifier_summary": "No reply received.",
+    "final_status": "NO_RESPONSE",
+    "linda_action_required": true,
+    "suggested_action": "Call customer",
+    "escalation_reason": "No reply received to confirmation message",
+    "customer_acknowledgement": null,
+    "error_state": null,
+    "timeline": [
+      {
+        "time": "2026-09-12T22:00:00.000Z",
+        "actor": "SYSTEM",
+        "event": "Confirmation message sent"
+      },
+      {
+        "time": null,
+        "actor": "SYSTEM",
+        "event": "No response received by cutoff — added to dispatcher review queue"
+      }
+    ]
+  }
+]

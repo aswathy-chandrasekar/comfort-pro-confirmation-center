@@ -1,0 +1,24 @@
+{
+  "name": "comfort-pro-backend",
+  "version": "1.0.0",
+  "description": "Small Express + SQLite API: durable event idempotency, appointment state and audit trail for the Confirmation Center.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js",
+    "reset": "node reset-demo.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
