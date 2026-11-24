@@ -1,38 +1,48 @@
 # Comfort Pro Confirmation Center
 
-**An appointment-confirmation automation that turns a dispatcher's morning from "call every customer" into "work only the exceptions."**
+**An Appointment-Confirmation Automation That Turns a Dispatcher's Morning From "Call Every Customer" Into "Work Only the Exceptions."**
 
-Rules first, AI second. AI interprets, business rules decide. Anything uncertain goes to a person.
+Rules First, AI Second. AI Interprets, Business Rules Decide. Anything Uncertain Goes to a Person.
 
-`Node 20+` · `Express + SQLite` · `React` · `n8n` · `Anthropic Claude (classification only)`
+`Node 20+` · `Express + SQLite` · `React` · `n8n` · `Anthropic Claude (Classification Only)`
+
+---
+
+## At a Glance
+
+| | |
+|---|---|
+| **The Problem** | A dispatcher spends 1.5 to 2 hours every morning phoning customers to confirm they will be home. About half do not answer. |
+| **The Solution** | Text every customer, interpret the replies, auto-confirm the routine ones, and give the dispatcher a short exceptions list. |
+| **The Result** | 10 appointments in, 6 confirmed automatically, 4 sent to a person. |
+| **The Principle** | Automate certainty. Escalate ambiguity. The system never reschedules, cancels, prices or dispatches on its own. |
+| **My Contribution** | Problem framing and prioritization, decision engine, n8n workflow, backend API, dispatcher UI integration, tests, and documentation. |
 
 ---
 
 ## Outcome
 
-Ten appointments go in. The system texts each customer, reads the replies, and resolves the routine ones. The dispatcher opens one screen and sees only what needs her.
-
-| | Count | What Happened |
+| Measure | Count | What Happened |
 |---|---|---|
-| Appointments processed | 10 | Confirmation text built for each one |
-| Confirmed automatically | 6 | 1 by an exact rule (no AI), 5 by AI interpretation above the confidence gate |
-| Sent to the dispatcher | 4 | 1 schedule change, 1 question, 2 no response |
+| Appointments Processed | 10 | A confirmation text was built for each one |
+| Confirmed Automatically | 6 | 1 by an exact rule (no AI), 5 by AI interpretation above the confidence gate |
+| Sent to the Dispatcher | 4 | 1 schedule change, 1 question, 2 no response |
 
-The system never reschedules, cancels, prices or dispatches anything on its own. The customer who asks to move her appointment gets routed to a person; the schedule is untouched.
+The customer who asks to move her appointment is routed to a person. Her schedule is not touched.
 
 ---
 
 ## The Client Problem
 
-A residential HVAC and plumbing company (about $12M revenue, 14 technicians, one dispatcher) spends roughly 1.5 to 2 hours every morning phoning customers to confirm they will be home. About half do not answer. No-shows waste technician time and truck rolls.
+A residential HVAC and plumbing company (about $12M in revenue, 14 technicians, one dispatcher) loses a large part of every morning to confirmation calls, and no-shows waste technician time and truck rolls.
 
-The owner raised three ideas: a website chatbot, appointment confirmations, and after-hours call intake. I treated that as a prioritization problem, not a build list:
+The owner raised three ideas: a website chatbot, appointment confirmations and after-hours call intake. I treated that as a prioritization problem, not a build list.
 
 | Opportunity | Evidence Today | Decision |
 |---|---|---|
-| Appointment confirmations | Measured daily workload and observed no-shows | **Build first** |
-| After-hours intake | Possible lost revenue, but call volume and conversion are unknown | Measure during the pilot, then decide |
-| Website chatbot | No defined problem or success metric | Hold |
+| Appointment Confirmations | Measured daily workload and observed no-shows | **Build First** |
+| After-Hours Intake | Possible lost revenue, but call volume and conversion are unknown | Measure During the Pilot, Then Decide |
+| Website Chatbot | No defined problem or success metric | Hold |
 
 ---
 
@@ -63,20 +73,35 @@ flowchart LR
 |---|---|---|
 | `YES` | Exact-match rule. No model call, so no cost, no latency, fully deterministic. | Confirmed |
 | `My wife will be there` | The model reads the sentence and returns an intent and a confidence. Business rules gate it. | Confirmed (95%) |
-| `Can we move this to tomorrow afternoon?` | The model detects a schedule change. Policy says a person decides, regardless of confidence. | Dispatcher review. **No schedule change is made.** |
+| `Can we move this to tomorrow afternoon?` | The model detects a schedule change. Policy says a person decides, regardless of confidence. | Dispatcher Review. **No Schedule Change Is Made.** |
 
 ### Failure Modes Are Designed, Not Discovered
 
 | What Goes Wrong | What the System Does |
 |---|---|
-| Model returns invalid JSON, times out, or returns an unknown intent | `NEEDS_REVIEW`, routed to a person |
+| Model returns invalid JSON, times out or returns an unknown intent | `NEEDS_REVIEW`, routed to a person |
 | Model is unsure (confidence below 0.85) | `NEEDS_REVIEW`, never an automatic confirmation |
-| Customer reply is ambiguous ("probably", "call me") | Dispatcher review |
+| Reply is ambiguous ("probably", "call me") | Dispatcher review |
 | Customer says `WHY` | Does not match the rule for `Y`; the anchored pattern is `^(YES\|Y\|CONFIRM\|CONFIRMED)$` |
 | Same inbound message arrives twice | Blocked before classification, acknowledgement or any write |
 | Customer confirms, then asks to change | Current status updates; earlier events stay in history |
 | Customer replies after the 5:30 PM checkpoint | Processed normally. The checkpoint means "stop waiting and escalate," not "stop accepting replies." |
-| Customer text tries to instruct the model | The prompt tells the model to ignore embedded instructions and classify the text as ordinary customer speech; the model's output is still validated and gated by business rules, so it cannot take an action even if manipulated |
+| Customer text tries to instruct the model | The prompt tells the model to ignore embedded instructions, and its output is still validated and gated by business rules, so it cannot take an action even if manipulated |
+
+---
+
+## Key Engineering Decisions
+
+| Decision | Why It Matters |
+|---|---|
+| Rules Before AI | Obvious replies cost nothing and behave identically every time. The model is used only where language needs interpreting. |
+| The Model Classifies, Code Decides | A misread costs a dispatcher a few seconds of review, never a wrong truck roll. |
+| One Automated Outcome | Only a high-confidence confirmation is automatic. Everything else goes to a person. |
+| Idempotency Before Any Work | Events are claimed in a database first, so duplicate delivery cannot cause a second action, and the guarantee survives a restart. |
+| Append-Only History | A later message changes the current status without erasing what came before. |
+| Backend as Source of Truth | The UI renders what the backend holds and contains no business logic. |
+
+Full reasoning, alternatives and trade-offs: [`docs/DESIGN_DECISIONS.md`](docs/DESIGN_DECISIONS.md).
 
 ---
 
@@ -86,21 +111,17 @@ Every external system sits behind a clearly marked boundary, so moving from prot
 
 | Boundary | In This Repository | Pilot Replacement |
 |---|---|---|
-| Appointment source | `automation/data/appointments.json` | Supported ServiceTitan export, API or webhook |
+| Appointment Source | `automation/data/appointments.json` | Supported ServiceTitan export, API or webhook |
 | Outbound SMS | Message built and recorded as `SIMULATED_SENT` | Approved SMS provider or existing messaging infrastructure |
 | Inbound SMS | `automation/data/responses.json` | Inbound messaging webhook |
-| Status write-back | Local SQLite database | Supported ServiceTitan status update, or surface exceptions in the dispatcher's existing workflow |
-| Sign-in | Local demo sign-in | Real identity provider |
+| Status Write-Back | Local SQLite database | Supported ServiceTitan status update, or surface exceptions in the dispatcher's existing workflow |
+| Sign-In | Local demo sign-in | Real identity provider |
 
 Pilot replacements are subject to available ServiceTitan API and integration capabilities, which the first rollout step confirms before anything is built.
 
 What is real and runs end to end: the rules, the classifier prompt and call path, the confidence gate and routing, idempotency claims in a database, state history, the API, and the dispatcher UI reading from that API.
 
-Design write-ups:
-
-- [`docs/DESIGN_DECISIONS.md`](docs/DESIGN_DECISIONS.md): the key decisions, the alternatives considered, and the trade-offs.
-- [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md): risk register, production requirements, rollout plan and pilot success metrics.
-- [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md): a three-minute walkthrough.
+Production planning: [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md) covers the risk register, readiness checklist, rollout plan and pilot success metrics. A three-minute walkthrough is in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md).
 
 ---
 
@@ -108,12 +129,12 @@ Design write-ups:
 
 | Evidence | Result |
 |---|---|
-| Primary scenario | 10 total, 6 confirmed, 4 exceptions (4473, 4477, 4478, 4480) |
-| Edge-case suite | 23/23: every reply category, failure paths, state override, duplicate short-circuit, exact-match safety, late reply after no-response |
-| Engine to database | Sync writes 10 / 6 / 4; a second run ignores all ten events as duplicates; claims and state survive a backend restart |
-| Browser checks against the live backend | 37/37: KPIs, filters, search, KPI-card navigation, detail drawers, mark reviewed, date navigation, Activity, Calendar, mobile width |
-| n8n workflow, structural validation | Connections resolve, node types match their contents, no orphaned nodes, embedded prompt identical to the canonical prompt, threshold equal to the engine's, duplicate branch cannot reach the model |
-| Clean-install check | Fresh extract, `npm run setup`, tests, demo, build and browser checks all pass |
+| Primary Scenario | 10 total, 6 confirmed, 4 exceptions (4473, 4477, 4478, 4480) |
+| Edge-Case Suite | 23/23: every reply category, failure paths, state override, duplicate short-circuit, exact-match safety, late reply after no-response |
+| Engine to Database | Sync writes 10 / 6 / 4; a second run ignores all ten events as duplicates; claims and state survive a backend restart |
+| Browser Checks Against the Live Backend | 37/37: KPIs, filters, search, KPI-card navigation, detail drawers, mark reviewed, date navigation, Activity, Calendar, mobile width |
+| n8n Structural Validation | Connections resolve, node types match their contents, no orphaned nodes, embedded prompt identical to the canonical prompt, threshold equal to the engine's, duplicate branch cannot reach the model |
+| Clean-Install Check | Fresh extract, `npm run setup`, tests, demo, build and browser checks all pass |
 
 Recorded output: [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md).
 
@@ -121,12 +142,12 @@ Recorded output: [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md).
 
 | Level | Status |
 |---|---|
-| Automation logic executed locally | Verified |
-| Edge cases executed locally | Verified |
-| Engine, API, database and UI executed together | Verified |
-| n8n workflow structure | Validated by script (does not run n8n) |
-| n8n workflow executed in a local n8n instance with a live Claude call | Run by the author; execution evidence to be added under `docs/` |
-| Node engine making a live Anthropic call | Supported by the code path; automated runs use the fixture so tests need no API key |
+| Automation Logic Executed Locally | Verified |
+| Edge Cases Executed Locally | Verified |
+| Engine, API, Database and UI Executed Together | Verified |
+| n8n Workflow Structure | Validated by script (does not run n8n) |
+| n8n Workflow Executed With a Live Claude Call | Run locally by the author; execution evidence to be added under `docs/` |
+| Node Engine Making a Live Anthropic Call | Supported by the code path; automated runs use a fixture so tests need no API key |
 
 ---
 
@@ -165,7 +186,7 @@ python frontend/e2e/check_ui.py
 
 **Live Classification** (Optional): copy `.env.example`, set `ANTHROPIC_API_KEY`, and run the engine or sync script. Without a key the classifier uses `automation/data/llm_fixture.json`. The model name is set in `automation/src/engine.js` and in the n8n HTTP node; change both together.
 
-**n8n**: import `automation/workflow/Comfort_Pro_Confirmations.json` and create the header credential the "Classify Intent" node expects. Run `npm run automation:workflow:validate` after any edit.
+**n8n:** import `automation/workflow/Comfort_Pro_Confirmations.json` and create the header credential the "Classify Intent" node expects. Run `npm run automation:workflow:validate` after any edit.
 
 ---
 
@@ -173,15 +194,15 @@ python frontend/e2e/check_ui.py
 
 This is the smallest system that proves the business case end to end. What it deliberately leaves for the pilot phase:
 
-| Next Step | Why It Is a Pilot Step, Not a Prototype Step |
+| Next Step | Why It Is a Pilot Step |
 |---|---|
-| Connect n8n to the backend API | The UI is currently fed by the sync script that runs the same engine. Wiring n8n's HTTP nodes to the same endpoints is a contained change. |
-| Real timestamps and an audit-driven Activity page | The Activity page already uses recorded send, reply and checkpoint times; moving it to read the audit table directly is a next iteration. |
-| Consent and opt-out handling, retries, delivery receipts | Depend on the chosen SMS provider and counsel's guidance; specified in the readiness document. |
-| Tune the 0.85 confidence gate | It is a conservative starting assumption; calibrate it against dispatcher-reviewed historical replies. |
-| API authentication and monitoring | Required before any real customer data; specified in the readiness document. |
+| Connect n8n to the Backend API | The UI is fed by a sync script that runs the same engine. Pointing n8n's HTTP nodes at the same endpoints is a contained change. |
+| Audit-Driven Activity Page | Activity already uses recorded send, reply and checkpoint times; reading the audit table directly is the next iteration. |
+| Consent, Opt-Out, Retries and Delivery Receipts | These depend on the chosen SMS provider and legal guidance; they are specified in the readiness document. |
+| Tune the 0.85 Confidence Gate | It is a conservative starting assumption to calibrate on dispatcher-reviewed historical replies. |
+| API Authentication and Monitoring | Required before any real customer data; specified in the readiness document. |
 
-Known behaviors worth knowing: the UI polls the API every 3 seconds; only "tomorrow" has a live batch; "Mark reviewed" is local UI state and does not write to ServiceTitan; the frontend build uses `DISABLE_ESLINT_PLUGIN=true` (set in `frontend/.env`) because of a toolchain version clash, and a `patch-package` patch for `ajv-keywords` applies automatically on install.
+Behaviors worth knowing: the UI polls the API every 3 seconds; only "tomorrow" has a live batch; "Mark Reviewed" is local UI state and does not write to ServiceTitan; the frontend build sets `DISABLE_ESLINT_PLUGIN=true` in `frontend/.env` because of a toolchain version clash, and a `patch-package` patch for `ajv-keywords` applies automatically on install.
 
 ---
 
@@ -200,4 +221,10 @@ frontend/     React app, patches/, e2e/check_ui.py
 docs/         DESIGN_DECISIONS.md, PRODUCTION_READINESS.md, DEMO_SCRIPT.md, TEST_RESULTS.md
 ```
 
-Licensed under the MIT License. See [`LICENSE`](LICENSE).
+---
+
+## Copyright and Usage
+
+Copyright © 2026 Aswathy Chandrasekar. All rights reserved.
+
+This repository is shared for portfolio and evaluation purposes only. No permission is granted to use, copy, modify, distribute or build on this work without written permission. See [`LICENSE`](LICENSE).
