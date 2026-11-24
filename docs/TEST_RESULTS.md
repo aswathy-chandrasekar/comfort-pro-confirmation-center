@@ -1,10 +1,10 @@
-# Test results
+# Test Results
 
 Recorded from a **fresh extract** of the project zip (clean `npm run setup`, no prior `node_modules` or database), Node 22, Linux, on 2026-11-23.
 
-Scope: this records what was executed. Not covered: running n8n, or a live Anthropic call (all runs used `automation/data/llm_fixture.json`). See the README "Verification status" section.
+Scope: this records what was executed. Not covered: running n8n, or a live Anthropic call (all runs used `automation/data/llm_fixture.json`). See the README "Quality evidence" section.
 
-Reproduce with the commands shown in each heading (see README "Quick start"). The UI check needs the backend on :4000, `npm run demo` completed, and the built frontend served on :3000.
+Reproduce with the commands shown in each heading (see README "Run it"). The browser check needs the backend on :4000, `npm run demo` completed, and the built frontend served on :3000.
 
 ```text
 ### npm run test-all
@@ -82,7 +82,7 @@ This run: processed=10 duplicates_ignored=0
 SYNC CHECK: PASS
 Compiled successfully.
 
-### python3 frontend/e2e/check_ui.py
+### python frontend/e2e/check_ui.py
 PASS  KPI total = 10
 PASS  KPI confirmed = 6
 PASS  KPI needs review = 4
@@ -114,10 +114,12 @@ PASS  Mark reviewed removes Patricia from the queue (3 left)
 PASS  Next day shows no live appointments
 PASS  Back to tomorrow shows all 10 again
 PASS  Activity page lists events from live data
+PASS  Activity starts with the batch send (recorded time) and lists 10 messages
+PASS  Activity is in chronological order
 PASS  Calendar page renders
 PASS  No 'Simulate late reply' control in the UI
 PASS  Mobile: no horizontal page scroll
 PASS  No uncaught page errors
 
-35/35 UI checks passed
+37/37 UI checks passed
 ```

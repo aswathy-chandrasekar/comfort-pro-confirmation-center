@@ -54,42 +54,63 @@ export function weekdayLabel(iso) {
 }
 
 export function getActivityForDate(iso, appointments) {
+  // Events are derived from the backend's recorded timestamps and statuses
+  // (send time, reply time, checkpoint time). Nothing here is invented.
   const count = appointments.length;
-  const events = [
-    { time: "5:00 PM", title: `${count} confirmation messages sent`, subtitle: `Batch dispatch for ${formatShort(iso)} confirmations`, tone: "neutral" },
-  ];
+  const firstSent = appointments
+    .map((a) => a.confirmationSent?.time)
+    .find(Boolean);
+  const events = [];
+  if (count > 0 && firstSent) {
+    events.push({
+      time: firstSent,
+      title: `${count} confirmation messages sent`,
+      subtitle: `Batch dispatch for ${formatShort(iso)} confirmations`,
+      tone: "neutral",
+    });
+  }
   appointments.forEach((a) => {
+    const replyTime = a.customerReply?.time;
+    const timelineTime = (label) =>
+      a.timeline?.find((t) => t.event === label)?.time;
     if (a.status === "confirmed" && a.customerReply) {
       events.push({
-        time: a.customerReply.time,
+        time: replyTime,
         title: `${a.customerName} confirmed`,
-        subtitle: a.automation.processedUsing === "exact_rule" ? "Exact confirmation" : "Natural language confirmation",
+        subtitle: a.automation?.processedUsing === "exact_rule" ? "Exact confirmation" : "Natural language confirmation",
         tone: "success",
       });
     } else if (a.status === "schedule_change") {
       events.push({
-        time: a.customerReply?.time || "5:14 PM",
+        time: replyTime || timelineTime("Schedule change detected"),
         title: `${a.customerName} requested a schedule change`,
         subtitle: "Sent to dispatcher review",
         tone: "warning",
       });
     } else if (a.status === "question") {
       events.push({
-        time: a.customerReply?.time || "5:18 PM",
+        time: replyTime || timelineTime("Customer question detected"),
         title: `${a.customerName} asked a question`,
         subtitle: "Sent to dispatcher review",
         tone: "info",
       });
+    } else if (a.status === "needs_review") {
+      events.push({
+        time: replyTime || timelineTime("Reply could not be classified safely"),
+        title: `${a.customerName} reply needs review`,
+        subtitle: "Could not be classified safely, sent to dispatcher review",
+        tone: "warning",
+      });
     } else if (a.status === "no_response") {
       events.push({
-        time: "5:30 PM",
+        time: timelineTime("Response checkpoint reached"),
         title: `${a.customerName} reached response checkpoint`,
         subtitle: "No response, dispatcher follow-up required",
         tone: "warning",
       });
     }
   });
-  // Chronological sort so derived events read in order.
+  // Chronological sort so events read in order.
   const toMin = (t) => {
     if (!t) return 0;
     const [hm, ap] = t.split(" ");

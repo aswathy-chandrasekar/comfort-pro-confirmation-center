@@ -140,6 +140,12 @@ with sync_playwright() as p:
     pg.click("[data-testid=nav-activity]"); pg.wait_for_timeout(600)
     act = pg.inner_text("main")
     check("Activity page lists events from live data", "Angela Brooks" in act and "Kevin Marsh" in act and "Denise Harper" in act)
+    check("Activity starts with the batch send (recorded time) and lists 10 messages", "10 confirmation messages sent" in act)
+    times = pg.eval_on_selector_all("[data-testid^=activity-item-] .font-mono", "els=>els.map(e=>e.textContent.trim())")
+    def mins(t):
+        hm, ap = t.split(" "); h, m = map(int, hm.split(":"))
+        return (h % 12 + (12 if ap == "PM" else 0)) * 60 + m
+    check("Activity is in chronological order", [mins(t) for t in times] == sorted(mins(t) for t in times), str(times))
     pg.click("[data-testid=nav-calendar]"); pg.wait_for_timeout(600)
     check("Calendar page renders", len(pg.inner_text("main")) > 50)
     pg.click("[data-testid=nav-overview]"); pg.wait_for_timeout(600)
